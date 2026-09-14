@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="description" content="TimeFlow Timer — مؤقت تنازلي احترافي" />
+    <meta name="theme-color" content="#4f46e5" />
+    <title>TimeFlow Timer — المؤقت التنازلي</title>
+    <link rel="manifest" href="manifest.json" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-badge" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="13" r="8" />
+              <path d="M12 9.5V13l2.4 2.4" />
+              <path d="M9 2h6" />
+              <path d="M19 5.5l1.6 1.6" />
+            </svg>
+          </span>
+          <span class="brand-name">TimeFlow Timer</span>
+        </div>
+
+        <div class="header-actions">
+          <button
+            id="themeToggle"
+            class="icon-btn"
+            type="button"
+            aria-label="تبديل الوضع الليلي"
+            title="تبديل الوضع الليلي"
+          ></button>
+          <button
+            id="fullscreenBtn"
+            class="icon-btn"
+            type="button"
+            aria-label="ملء الشاشة"
+            title="ملء الشاشة"
+          ></button>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <h1 class="page-title">المؤقت التنازلي</h1>
+
+        <section class="card setup-card" aria-labelledby="setupTitle">
+          <h2 class="card-title" id="setupTitle">حدّد المدة</h2>
+
+          <div class="time-inputs">
+            <div class="time-field">
+              <label for="hoursInput">ساعات</label>
+              <input
+                id="hoursInput"
+                class="time-input"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="99"
+                step="1"
+                value="0"
+                dir="ltr"
+                placeholder="00"
+                aria-label="عدد الساعات"
+              />
+            </div>
+
+            <span class="time-sep" aria-hidden="true">:</span>
+
+            <div class="time-field">
+              <label for="minutesInput">دقائق</label>
+              <input
+                id="minutesInput"
+                class="time-input"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                step="1"
+                value="3"
+                dir="ltr"
+                placeholder="00"
+                aria-label="عدد الدقائق"
+              />
+            </div>
+
+            <span class="time-sep" aria-hidden="true">:</span>
+
+            <div class="time-field">
+              <label for="secondsInput">ثواني</label>
+              <input
+                id="secondsInput"
+                class="time-input"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                step="1"
+                value="0"
+                dir="ltr"
+                placeholder="00"
+                aria-label="عدد الثواني"
+              />
+            </div>
+          </div>
+
+          <p class="setup-hint">
+            يمكنك كتابة قيم أكبر من 59 — مثال: <strong>90</strong> دقيقة تتحول
+            تلقائيًا إلى <strong>01:30:00</strong>.
+          </p>
+
+          <div class="presets" id="presets" role="group" aria-label="مدد جاهزة">
+            <button type="button" class="preset" data-minutes="1">
+              1 دقيقة
+            </button>
+            <button type="button" class="preset" data-minutes="3">
+              3 دقائق
+            </button>
+            <button type="button" class="preset" data-minutes="5">
+              5 دقائق
+            </button>
+            <button type="button" class="preset" data-minutes="10">
+              10 دقائق
+            </button>
+            <button type="button" class="preset" data-minutes="15">
+              15 دقيقة
+            </button>
+            <button type="button" class="preset" data-minutes="25">
+              25 دقيقة
+            </button>
+            <button type="button" class="preset" data-minutes="30">
+              30 دقيقة
+            </button>
+            <button type="button" class="preset" data-minutes="60">
+              60 دقيقة
+            </button>
+          </div>
+        </section>
+
+        <section class="timer-section" aria-label="المؤقت">
+          <div class="timer-wrap" id="timerWrap">
+            <svg
+              class="progress-ring"
+              viewBox="0 0 240 240"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <defs>
+                <linearGradient
+                  id="ringGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="var(--primary)" />
+                  <stop offset="100%" stop-color="var(--primary-2)" />
+                </linearGradient>
+              </defs>
+              <circle class="ring-track" cx="120" cy="120" r="110" />
+              <circle
+                class="ring-progress"
+                id="ringProgress"
+                cx="120"
+                cy="120"
+                r="110"
+                stroke="url(#ringGradient)"
+              />
+            </svg>
+
+            <div class="timer-face">
+              <div
+                class="time-text"
+                id="timeDisplay"
+                dir="ltr"
+                role="timer"
+                aria-live="off"
+              >
+                03:00
+              </div>
+              <div class="status-text" id="statusText">جاهز للبدء</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button
+              id="primaryBtn"
+              class="btn btn-primary"
+              type="button"
+              data-action="start"
+            >
+              بدء
+            </button>
+            <button id="resetBtn" class="btn btn-ghost" type="button">
+              إعادة ضبط
+            </button>
+          </div>
+        </section>
+
+        <section class="card settings-card" aria-labelledby="settingsTitle">
+          <h2 class="card-title" id="settingsTitle">الإعدادات</h2>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">صوت التنبيه</span>
+              <span class="setting-hint">نغمة قصيرة عند الوصول إلى 00:00</span>
+            </div>
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="soundToggle"
+                checked
+                aria-label="تفعيل صوت التنبيه"
+              />
+              <span class="switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">الوضع الليلي</span>
+              <span class="setting-hint">يتم حفظ اختيارك تلقائيًا</span>
+            </div>
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="darkToggle"
+                aria-label="تفعيل الوضع الليلي"
+              />
+              <span class="switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="setting-row setting-row--action">
+            <div class="setting-text">
+              <span class="setting-label">حفظ الإعدادات</span>
+              <span class="setting-hint"
+                >يتم الحفظ تلقائيًا — ويمكنك الحفظ يدويًا الآن</span
+              >
+            </div>
+            <button id="saveBtn" class="btn btn-soft btn-sm" type="button">
+              حفظ الآن
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>TimeFlow Timer</span>
+        <span class="dot" aria-hidden="true">•</span>
+        <span>مؤقت تنازلي دقيق</span>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="sr-only" id="liveRegion" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then(() => {
+              console.log("TimeFlow Service Worker registered successfully.");
+            })
+            .catch((error) => {
+              console.error("Service Worker registration failed:", error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
